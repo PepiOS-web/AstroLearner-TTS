@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080e1b">
+  <title>AstroLearner · Estudio de voz</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" type="module"></script>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="AstroLearner, inicio">
+      <svg class="brand-mark" width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="1.2"/><ellipse cx="20" cy="20" rx="20" ry="6.5" transform="rotate(-35 20 20)" stroke="currentColor" stroke-width="1.2"/><path d="m20 10 7.5 20h-4l-1.5-4.5h-6L14.5 30h-4L18 10h2Zm-2.8 12h3.6L19 16.4 17.2 22Z" fill="currentColor"/><circle cx="34" cy="10" r="2.5" fill="#ffbe67"/></svg>
+      <span>AstroLearner<span class="brand-sub">ESTUDIO DE VOZ</span></span>
+    </a>
+    <div class="system-status"><span class="status-light" id="system-light"></span><span id="system-label">Conectando al estudio</span><span class="local-chip">LOCAL</span></div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div><div class="eyebrow"><span></span> TU UNIVERSO, TU VOZ</div><h1>Las historias empiezan<br>con una <em>voz propia.</em></h1><p>Diseña, escucha y encuentra la voz de AstroLearner.<br class="desktop-break"> Después, dale vida a tu próximo guion.</p></div>
+      <div class="intro-note"><span class="orbit-mini" aria-hidden="true">✦</span><p>Dos idiomas.<br>Una identidad.</p><span class="note-languages">ES <i>↗</i> EN</span></div>
+    </section>
+
+    <div class="workspace-heading"><div class="tabs" role="tablist" aria-label="Modo del estudio"><button id="tab-design" class="tab active" role="tab" aria-selected="true" aria-controls="editor" data-mode="design"><span>01</span> Diseñar voces</button><button id="tab-narrate" class="tab" role="tab" aria-selected="false" aria-controls="editor" data-mode="narrate"><span>02</span> Narrar guion</button></div><span class="workspace-hint">CREACIÓN LOCAL · SIN ENVÍO DE AUDIO</span></div>
+
+    <div class="studio-grid">
+      <aside class="profiles-panel panel" aria-labelledby="profiles-title">
+        <div class="section-label">BIBLIOTECA</div><h2 id="profiles-title">Tus voces</h2><p class="muted small">Elige una identidad para empezar.</p>
+        <div id="profile-list" class="profile-list" aria-label="Perfiles de voz"><div class="loading-text">Cargando perfiles…</div></div>
+        <div class="library-note"><span aria-hidden="true">✧</span><p>Voces para las narraciones de AstroLearner.</p></div>
+        <div class="hardware"><div class="section-label">MOTOR LOCAL</div><p id="gpu-label">Comprobando GPU…</p><p class="muted small" id="gpu-detail">El modelo se carga al generar.</p></div>
+      </aside>
+
+      <section id="editor" class="editor-panel panel" role="tabpanel" aria-labelledby="tab-design">
+        <div class="panel-topline"><div><div class="section-label" id="editor-kicker">DISEÑO DE VOZ</div><h2 id="editor-title">Dale carácter.</h2></div><span class="language-pill" id="selected-language">ESPAÑOL</span></div>
+        <p class="editor-description" id="editor-description">Describe una voz, genera una muestra y escúchala antes de aprobarla.</p>
+        <form id="voice-form">
+          <div class="field" id="style-field"><div class="label-line"><label for="instruct">Dirección de voz</label><span class="field-tip">Cómo debe sonar</span></div><textarea id="instruct" rows="4" maxlength="3000" placeholder="Timbre, energía, intención y acento…"></textarea><p class="field-help">Ajusta el carácter y la forma de contar. Cada diseño crea un borrador nuevo.</p></div>
+          <div class="field"><div class="label-line"><label id="text-label" for="script-text">Texto de prueba</label><span class="field-tip" id="text-count">0 / 18.000</span></div><textarea id="script-text" rows="6" maxlength="18000" required placeholder="Escribe el texto que quieres escuchar…"></textarea><div class="text-footer"><span id="text-help">Una muestra breve ayuda a comparar voces.</span><button type="button" class="text-button" id="load-example">Usar texto de ejemplo ↗</button></div></div>
+          <div class="settings-row"><div class="seed-field"><label for="seed">Semilla</label><input type="number" id="seed" value="42" min="0" max="4294967295" step="1" required><span title="La misma semilla ayuda a comparar diseños; no garantiza resultados idénticos entre equipos." class="info-mark">i</span></div><details id="advanced-settings"><summary>Ajustes de pronunciación <span>+</span></summary><div class="advanced-content"><label for="pronunciations">Palabras y reemplazos · JSON</label><textarea id="pronunciations" rows="3" spellcheck="false" placeholder='{"AstroLearner": "Astro Lérner"}'></textarea><p class="field-help">Opcional. Se aplica al texto enviado al motor.</p></div></details></div>
+          <div class="form-notice" id="approval-notice" hidden>Primero diseña, escucha y aprueba una voz para este perfil.</div>
+          <div class="form-error" id="form-error" role="alert" hidden></div>
+          <div class="submit-row"><span id="submit-note">Tu voz aprobada se conserva<br>mientras exploras nuevos diseños.</span><button type="submit" class="button primary" id="generate-button"><span id="generate-label">Generar muestra</span><span aria-hidden="true">↗</span></button></div>
+        </form>
+        <details id="reference-section" class="reference-section">
+          <summary>Usar una grabación de referencia <span aria-hidden="true">+</span></summary>
+          <div class="reference-content">
+            <p class="reference-intro">Crea una referencia de voz a partir de un fragmento limpio. Usa una grabación propia o una voz con permiso para clonarla.</p>
+            <form id="reference-form">
+              <div class="field"><label for="reference-audio">Archivo de audio</label><input type="file" id="reference-audio" accept=".mp3,.wav,.flac,.m4a,.ogg,audio/mpeg,audio/wav,audio/flac,audio/mp4,audio/ogg"><p class="field-help" id="reference-file-info">MP3, WAV, FLAC, M4A u OGG · máximo 25 MiB.</p></div>
+              <audio id="reference-source-player" class="reference-source-player" controls preload="metadata" aria-label="Escuchar el archivo de referencia" hidden></audio>
+              <div class="reference-range"><div><label for="reference-start">Inicio del fragmento · segundos</label><input type="number" id="reference-start" value="0" min="0" step="0.1" required></div><div><label for="reference-duration">Duración · segundos</label><input type="number" id="reference-duration" value="15" min="5" max="30" step="0.1" required></div></div>
+              <p class="field-help">Selecciona entre 5 y 30 segundos de una sola voz, con frases completas y sin música.</p>
+              <div class="field"><div class="label-line"><label for="reference-text">Transcripción exacta del fragmento</label><span class="field-tip" id="reference-text-count">0 / 500</span></div><textarea id="reference-text" rows="4" maxlength="500" required placeholder="Escribe exactamente lo que se oye entre el inicio y el final del fragmento seleccionado…"></textarea><p class="field-help">Incluye solo las palabras del fragmento. La puntuación puede marcar sus pausas naturales.</p></div>
+              <div class="form-error" id="reference-error" role="alert" hidden></div>
+              <div class="submit-row reference-submit"><span>Se crea un borrador para escuchar y aprobar.</span><button type="submit" class="button secondary" id="reference-button">Crear voz desde audio <span aria-hidden="true">↗</span></button></div>
+            </form>
+          </div>
+        </details>
+      </section>
+
+      <aside class="preview-panel panel" aria-labelledby="preview-title">
+        <div class="preview-top"><div><div class="section-label">SALA DE ESCUCHA</div><h2 id="preview-title">Escucha la diferencia.</h2></div><span class="live-dot" aria-hidden="true"></span></div>
+        <div class="preview-visual" id="preview-visual" aria-hidden="true"><div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div><div class="voice-symbol"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><span class="visual-star">✦</span></div>
+        <div class="preview-id"><span class="preview-status" id="preview-status">LISTO PARA CREAR</span><h3 id="preview-name">Tu próxima voz está aquí.</h3><p class="muted" id="preview-caption">Genera una muestra y tómate un momento para escucharla.</p></div>
+        <p class="preview-warnings" id="preview-warnings" role="status" hidden></p>
+        <div id="audio-container" hidden><label class="audio-label" for="audio-player" id="audio-label">Muestra de voz</label><audio id="audio-player" controls preload="metadata"></audio><div class="audio-variants" id="audio-variants"></div><div id="metrics" class="metrics"></div><div class="audio-actions"><a id="download-audio" class="button secondary" download>Descargar WAV <span aria-hidden="true">↓</span></a><button type="button" id="approve-button" class="button approve" disabled>Escucha para aprobar</button></div><p class="approval-help" id="approval-help" hidden>Reproduce la muestra. Si te convence, aprueba esta versión para narrar.</p></div>
+        <div class="job-progress" id="job-progress" hidden><div class="progress-heading"><span id="job-state">En cola</span><button class="text-button" type="button" id="cancel-button">Cancelar</button></div><progress id="progress-bar" max="1" value="0"></progress><p id="progress-message" aria-live="polite">Esperando al motor local…</p></div>
+        <div class="preview-bottom"><span class="tiny-star" aria-hidden="true">✧</span><span id="preview-bottom-note">Escuchar → Ajustar → Aprobar</span></div>
+      </aside>
+    </div>
+
+    <section class="activity-section" aria-labelledby="activity-title"><div class="activity-heading"><h2 id="activity-title">Actividad del estudio <span id="activity-count">0</span></h2><span>UNA GENERACIÓN A LA VEZ</span></div><div id="job-list" class="job-list"><p class="empty-activity">Tus muestras y narraciones aparecerán aquí.</p></div></section>
+    <footer><span>ASTROLEARNER <i>✦</i> VOICE STUDIO</span><p>Tu equipo. Tu proceso. Tu voz.</p><span id="connection-detail">127.0.0.1 · ESTUDIO LOCAL</span></footer>
+  </main>
+  <div id="toast" role="status" class="toast" hidden></div>
+</body>
+</html>

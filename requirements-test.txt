@@ -1,0 +1,9 @@
+# CPU-only tests: no Torch, model downloads or private recordings.
+fastapi==0.162.2
+starlette==1.10.0
+pydantic==2.14.3
+python-multipart==0.0.33
+httpx==0.28.1
+pytest==9.2.0
+numpy==2.5.4
+soundfile==0.14.0
